@@ -11,33 +11,27 @@ export class Searchbar extends Component {
 
   handleSabmite = e => {
     e.preventDefault();
-
+    if (this.state.imageName.trim() === '') {
+      console.log('введите что нибуть!!!');
+      return;
+    }
     this.props.onSubmit(this.state.imageName);
     this.setState({ imageName: '' });
   };
 
   render() {
     return (
-      <header
-      // class="searchbar"
+      <header // class="searchbar"
       >
         <form
           // class="form"
           onSubmit={this.handleSabmite}
         >
-          <button
-            type="submit"
-            // class="button"
-          >
-            <span
-            // class="button-label"
-            >
-              Search
-            </span>
+          <button type="submit">
+            <span>Search</span>
           </button>
 
           <input
-            // class="input"
             type="text"
             autoComplete="off"
             autoFocus
