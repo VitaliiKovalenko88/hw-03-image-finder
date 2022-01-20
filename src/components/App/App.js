@@ -1,51 +1,22 @@
+// import axios from 'axios';
 import React, { Component } from 'react';
-import axios from 'axios';
+import { Searchbar } from '../Searchbar/Searchbar';
 
-axios.defaults.baseURL = 'https://hn.algolia.com/api/v1';
-
-const ArticleList = ({ articles }) => (
-  <ul>
-    {articles.map(({ objectID, url, title }) => (
-      <li key={objectID}>
-        <a href={url} target="_blank" rel="noreferrer noopener">
-          {title}
-        </a>
-      </li>
-    ))}
-  </ul>
-);
+// axios.defaults.baseURL = 'https://hn.algolia.com/api/v1';
 
 export class App extends Component {
   state = {
-    articles: [],
-    isLoading: false,
-    error: null,
+    imageName: '',
   };
 
-  async componentDidMount() {
-    this.setState({ isLoading: true });
-
-    try {
-      const response = await axios.get('/searh?query=');
-      this.setState({ articles: response.data.hits });
-      console.log('jhgjhgj');
-    } catch (error) {
-      this.setState({ error });
-      console.log('error');
-    } finally {
-      this.setState({ isLoading: false });
-      console.log('finali');
-    }
-  }
+  handleFormSubmite = imageName => {
+    this.setState({ imageName });
+  };
 
   render() {
-    const { articles, isLoading, error } = this.state;
-
     return (
       <div>
-        {error && <p>Whoops, something went wrong: {error.message}</p>}
-        {isLoading && <p>Loading...</p>}
-        {articles.length > 0 && <ArticleList articles={articles} />}
+        <Searchbar onSubmit={this.handleFormSubmite} />
       </div>
     );
   }
