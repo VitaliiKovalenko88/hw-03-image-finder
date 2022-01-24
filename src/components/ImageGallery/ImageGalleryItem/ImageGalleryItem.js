@@ -1,9 +1,7 @@
-export const ImageGalleryItem = ({ gallarys }) => {
-  return gallarys.map(({ id, url, tags }) => {
-    return (
-      <li key={id}>
-        <img src={url} alt={tags} />
-      </li>
-    );
-  });
+export const ImageGalleryItem = ({ url, tags }) => {
+  return (
+    <>
+      <img src={url} alt={tags} />
+    </>
+  );
 };
