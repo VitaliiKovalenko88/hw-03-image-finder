@@ -1,4 +1,5 @@
 import { ImageGalleryItem } from './ImageGalleryItem/ImageGalleryItem';
+import { Loader } from '../Loader/Loader';
 
 export const ImageGallery = ({ status, galleryList }) => {
   if (status === 'idle') {
@@ -6,7 +7,11 @@ export const ImageGallery = ({ status, galleryList }) => {
   }
 
   if (status === 'pending') {
-    return <div>Загружаем...</div>;
+    return (
+      <div>
+        <Loader />
+      </div>
+    );
   }
 
   if (status === 'resolved') {

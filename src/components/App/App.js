@@ -1,4 +1,5 @@
 // import axios from 'axios';
+// import 'react-loader-spinner/dist/loader/css/react-spinner-loader.css';
 import React, { Component } from 'react';
 import { getImageWithQuery } from '../../PixabayApi/pixabayApi';
 import { Button } from '../Button/Button';
@@ -40,17 +41,27 @@ export class App extends Component {
     this.setState({ imageName });
   };
 
-  createGallery = page => {
+  createGallery = async page => {
     const { imageName } = this.state;
 
-    this.setState({ status: status.PENDING });
+    try {
+      this.setState({ status: status.PENDING });
 
-    getImageWithQuery(imageName, page).then(galerry => {
+      const { hits } = await getImageWithQuery(imageName, page);
+
+      if (hits.length === 0) {
+        console.log('Sory, there are no image');
+        return;
+      }
+
       this.setState(prevState => ({
-        gallery: [...prevState.gallery, ...galerry.hits],
+        gallery: [...prevState.gallery, ...hits],
       }));
-    });
-    this.setState({ status: status.RESOLVED });
+
+      this.setState({ status: status.RESOLVED });
+    } catch (error) {
+      console.log(error.message);
+    }
   };
 
   onLoadMorePictures = () => {
