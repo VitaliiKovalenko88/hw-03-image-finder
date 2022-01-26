@@ -4,7 +4,7 @@ export const Loader = () => {
   return (
     <div className="loaderWrapper">
       <div className="loaderBox">
-        <Grid heigth="100" width="100" color="grey" ariaLabel="loading" />
+        <Grid color="#FF5733" height={100} width={110} />
       </div>
     </div>
   );
