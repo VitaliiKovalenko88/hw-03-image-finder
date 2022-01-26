@@ -88,7 +88,7 @@ export class App extends Component {
         {status === 'pending' ? <Loader /> : null}
         {status === 'rejected' ? <div>{error}</div> : null}
         <ImageGallery galleryList={gallery} />
-        {!isGallery ? <Button onLoadMore={this.onLoadMorePictures} /> : null}
+        {isGallery ? <Button onLoadMore={this.onLoadMorePictures} /> : null}
       </StyledApp>
     );
   }
