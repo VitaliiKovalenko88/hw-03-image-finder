@@ -1,18 +1,22 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import {
   StyledSearchbar,
   SearchForm,
   SearchFormButton,
-  SearchFormButtonLabel,
   SearchFormInput,
 } from './Searchbar.styled';
+import { ImSearch } from 'react-icons/im';
+
 export class Searchbar extends Component {
   state = {
     imageName: '',
   };
 
   handleNameChange = e => {
-    this.setState({ imageName: e.currentTarget.value });
+    this.setState({
+      imageName: e.currentTarget.value,
+    });
   };
 
   handleSabmite = e => {
@@ -30,7 +34,7 @@ export class Searchbar extends Component {
       <StyledSearchbar>
         <SearchForm onSubmit={this.handleSabmite}>
           <SearchFormButton type="submit">
-            <SearchFormButtonLabel>Search</SearchFormButtonLabel>
+            <ImSearch />
           </SearchFormButton>
 
           <SearchFormInput
@@ -46,3 +50,7 @@ export class Searchbar extends Component {
     );
   }
 }
+
+SearchForm.propTypes = {
+  onSubmit: PropTypes.func.isRequired,
+};

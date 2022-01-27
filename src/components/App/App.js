@@ -3,10 +3,11 @@
 import React, { Component } from 'react';
 import { StyledApp } from './App.styled';
 import { getImageWithQuery } from '../../PixabayApi/pixabayApi';
+import { Loader } from '../Loader/Loader';
 import { Button } from '../Button/Button';
+import { ModalImg } from '../Modal/Modal';
 import { Searchbar } from '../Searchbar/Searchbar';
 import { ImageGallery } from '../ImageGallery/ImageGallery';
-import { Loader } from '../Loader/Loader';
 
 const status = {
   IDLE: 'idle',
@@ -22,18 +23,26 @@ export class App extends Component {
     status: status.IDLE,
     page: 1,
     error: null,
+    showModal: false,
+    largeImage: '',
   };
 
-  async componentDidUpdate(prevPropse, prevState) {
+  async componentDidUpdate(
+    prevPropse,
+    prevState,
+  ) {
     try {
       const nextName = this.state.imageName;
       const prevName = prevState.imageName;
       const nextPage = this.state.page;
       const prevPage = prevState.page;
 
-      if (nextName !== prevName || nextPage !== prevPage) {
+      if (
+        nextName !== prevName ||
+        nextPage !== prevPage
+      ) {
         this.setState({ status: status.PENDING });
-        await this.createGallery(this.state.page);
+        this.createGallery();
       }
     } catch (error) {
       console.log(error.message);
@@ -41,20 +50,27 @@ export class App extends Component {
   }
 
   handleFormSubmite = imageName => {
-    this.setState({ imageName });
+    this.setState({
+      imageName,
+      gallery: [],
+      page: 1,
+    });
   };
 
-  createGallery = async page => {
-    const { imageName } = this.state;
+  createGallery = async () => {
+    const { imageName, page } = this.state;
 
     try {
-      this.setState({ status: status.PENDING });
-
-      const { hits } = await getImageWithQuery(imageName, page);
+      const { hits } = await getImageWithQuery(
+        imageName,
+        page,
+      );
 
       if (hits.length === 0) {
         this.setState({
-          error: 'Sory, You are entering an incorrect value',
+          gallery: [],
+          error:
+            'Sory, You are entering an incorrect value',
           status: status.REJECTED,
         });
         return;
@@ -67,8 +83,10 @@ export class App extends Component {
       }));
     } catch (error) {
       this.setState({
+        gallery: [],
         status: status.REJECTED,
-        error: 'something is wrong with the request address'.toUpperCase(),
+        error:
+          'something is wrong with the request address'.toUpperCase(),
       });
     }
   };
@@ -79,16 +97,55 @@ export class App extends Component {
     }));
   };
 
+  openModal = e => {
+    this.setState({
+      largeImage: e.target.dataset.image,
+    });
+    this.togleModal();
+    // this.setState({status: status.RESOLVED,})
+  };
+
+  togleModal = () => {
+    this.setState(({ showModal }) => ({
+      showModal: !showModal,
+    }));
+  };
+
   render() {
-    const { status, gallery, error } = this.state;
+    const {
+      status,
+      gallery,
+      error,
+      showModal,
+      largeImage,
+    } = this.state;
     const isGallery = gallery.length;
     return (
       <StyledApp>
-        <Searchbar onSubmit={this.handleFormSubmite} />
+        <Searchbar
+          onSubmit={this.handleFormSubmite}
+        />
         {status === 'pending' ? <Loader /> : null}
-        {status === 'rejected' ? <div>{error}</div> : null}
-        <ImageGallery galleryList={gallery} />
-        {isGallery ? <Button onLoadMore={this.onLoadMorePictures} /> : null}
+        {showModal && (
+          <ModalImg
+            onClose={this.togleModal}
+            onClick={this.togleModal}
+            url={largeImage}
+          />
+        )}
+        {status === 'rejected' ? (
+          <div>{error}</div>
+        ) : null}
+
+        <ImageGallery
+          galleryList={gallery}
+          onClick={this.openModal}
+        />
+        {isGallery ? (
+          <Button
+            onLoadMore={this.onLoadMorePictures}
+          />
+        ) : null}
       </StyledApp>
     );
   }

@@ -1,12 +1,27 @@
+import PropTypes from 'prop-types';
 import {
   StyledImageGalleryItem,
   ImageGalleryItemImg,
 } from './ImageGalleryItem.styled';
 
-export const ImageGalleryItem = ({ id, url, tags }) => {
+export const ImageGalleryItem = ({
+  url,
+  tags,
+  modalUrl,
+}) => {
   return (
-    <StyledImageGalleryItem key={id}>
-      <ImageGalleryItemImg src={url} alt={tags} />
+    <StyledImageGalleryItem>
+      <ImageGalleryItemImg
+        data-image={modalUrl}
+        src={url}
+        alt={tags}
+      />
     </StyledImageGalleryItem>
   );
+};
+
+ImageGalleryItem.propTypes = {
+  url: PropTypes.string.isRequired,
+  tags: PropTypes.string.isRequired,
+  modalUrl: PropTypes.string.isRequired,
 };
