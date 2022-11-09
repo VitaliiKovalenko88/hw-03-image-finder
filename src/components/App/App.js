@@ -1,5 +1,3 @@
-// import axios from 'axios';
-// import 'react-loader-spinner/dist/loader/css/react-spinner-loader.css';
 import React, { Component } from 'react';
 import { StyledApp } from './App.styled';
 import { getImageWithQuery } from '../../PixabayApi/pixabayApi';
